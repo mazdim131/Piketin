@@ -1,0 +1,79 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@700&display=swap");
+
+body {
+    font-family: "Inter", sans-serif;
+    background-color: #ffffff;
+    height: 100vh;
+    overflow: hidden; /* Mencegah scrollbar */
+}
+
+.main-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 1.5rem 2rem 1rem 2rem;
+}
+
+/* Custom Input Styling */
+.custom-input {
+    border: 1.5px solid #059669 !important;
+    border-radius: 10px !important;
+    padding: 0.6rem 1rem;
+    font-size: 0.875rem;
+    color: #333;
+}
+
+.custom-input::placeholder {
+    color: #a0aec0;
+    font-size: 0.85rem;
+}
+
+.custom-input:focus {
+    box-shadow: 0 0 0 0.2rem rgba(5, 150, 105, 0.2) !important;
+    border-color: #059669 !important;
+}
+
+/* Checkbox Styling */
+.custom-checkbox {
+    border: 1.5px solid #059669 !important;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.custom-checkbox:checked {
+    background-color: #059669 !important;
+    border-color: #059669 !important;
+}
+
+/* Green Button */
+.btn-piketin {
+    background-color: #059669;
+    color: white;
+    border-radius: 10px;
+    padding: 0.75rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-piketin:hover {
+    background-color: #047857;
+    color: white;
+}
+
+/* Right Banner */
+.banner-card {
+    background-color: #059669;
+    border-radius: 24px;
+    height: calc(100vh - 3rem);
+    padding: 4rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.text-green-brand {
+    color: #059669;
+}
+
