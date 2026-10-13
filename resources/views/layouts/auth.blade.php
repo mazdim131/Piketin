@@ -7,28 +7,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>PIKETIN | Website</title>
     <link rel="icon" href="{{ asset('images/Piketin_logo.png') }}" type="image/png">
-    <link rel="stylesheet" href="/resources/css/app.css">
-    {{-- bootstrap --}}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    {{-- bootstrap css --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    {{-- datatables --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/3.1.2/css/dataTables.dataTables.min.css" />
+
+    {{-- bootstrap icons --}}
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
+    {{-- app css --}}
+    <link rel="stylesheet" href="/resources/css/app.css">
 
     @stack('styles')
 </head>
 
 <body>
-
     @yield('contents')
 
-    {{-- bootstrap --}}
+    {{-- bootstrap js --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
     </script>
-    {{-- datatables --}}
-    <script src="https://cdn.datatables.net/3.1.2/js/dataTables.min.js"></script>
-
 
     @stack('scripts')
 </body>

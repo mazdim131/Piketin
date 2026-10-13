@@ -51,10 +51,17 @@ class UserController extends Controller
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
+            'token' => ['required'],
+            [
+                'email.required' => 'Email wajib diisi!',
+                'password.required' => 'Password wajib diisi!',
+                'token.required' => 'Token wajib diisi!',
+            ],
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
+
             return redirect()->route('home')->with('success', 'Login Berhasil! Selamat Datang');
         }
 
@@ -63,17 +70,71 @@ class UserController extends Controller
         ])->onlyInput('email');
     }
 
-    public function home()
+    public function logout(Request $request)
     {
-        return view('layouts.app');
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')->with('success', 'Berhasil logout!');
     }
 
-    public function attendance(Request $request) {
+    public function attendance(Request $request)
+    {
         $validate = $request->validate([
             'password' => ['required'],
             [
                 'password.required' => 'Password wajib diisi!',
-            ]
+            ],
         ]);
+    }
+
+    // function halaman
+    public function home()
+    {
+        return view('home');
+    }
+
+    public function set_job()
+    {
+        return view('set_job');
+    }
+
+    public function confirmation()
+    {
+        return view('confirmation');
+    }
+
+    public function kas()
+    {
+        return view('kas');
+    }
+
+    public function historyKas()
+    {
+        return view('historyKas');
+    }
+
+    public function warningLog()
+    {
+        return view('warningLog');
+    }
+
+    public function payKas()
+    {
+        return view('payKas');
+    }
+
+    public function piketLog()
+    {
+        return view('piketLog');
+    }
+
+    public function schedulePiket() {
+        return view('schedulePiket');
+    }
+
+    public function about() {
+        return view('about');
     }
 }

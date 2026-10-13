@@ -116,8 +116,6 @@
                             <div class="position-relative">
                                 <input type="password" id="password" name="password" class="form-control custom-input pe-5 @error('password') is-invalid @enderror"
                                     placeholder="Masukkan Password" autocomplete="off" value="{{ old('password') }}" required>
-                                <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 text-secondary cursor-pointer"
-                                    style="font-size: 1.1rem;"></i>
                             </div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -132,8 +130,6 @@
                             <div class="position-relative">
                                 <input type="password" id="password_confirmation" name="password_confirmation" class="form-control custom-input pe-5 @error('password_confirmation') is-invalid @enderror"
                                     placeholder="Konfirmasi Password" autocomplete="off" value="{{ old('password_confirmation') }}" required>
-                                <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 text-secondary cursor-pointer"
-                                    style="font-size: 1.1rem;"></i>
                             </div>
                             @error('password_confirmation')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>

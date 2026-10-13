@@ -81,6 +81,36 @@
                 </header>
 
                 <main class="w-100 my-auto mx-auto" style="max-width: 420px;">
+                    @if (Session::get('success'))
+                        <div class="alert alert-important alert-success alert-dismissible" role="alert">
+                            <div class="d-flex gap-3">
+                                <div>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24"
+                                        height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M5 12l5 5l10 -10"></path>
+                                    </svg>
+                                </div>
+                                <div>{{ Session::get('success') }}</div>
+                            </div>
+                            <a class="btn-close btn-close-black" data-bs-dismiss="alert" aria-label="close"></a>
+                        </div>
+                    @endif
+
+                    @if (Session::get('error'))
+                        <div class="alert alert-important alert-danger alert-dismissible" role="alert">
+                            <div class="d-flex gap-3">
+                                <div>
+                                    <i class="bi bi-x-circle"></i>
+                                </div>
+                                <div>{{ Session::get('error') }}</div>
+                            </div>
+                            <a class="btn-close btn-close-black" data-bs-dismiss="alert" aria-label="close"></a>
+                        </div>
+                    @endif
+
+
                     <div class="text-center mb-4">
                         <h1 class="fw-bold text-dark mb-2" style="font-size: 2.5rem; letter-spacing: -0.5px;">Selamat
                             Datang</h1>
@@ -110,15 +140,25 @@
                                     class="form-control custom-input pe-5 @error('password') is-invalid @enderror"
                                     placeholder="Masukkan Password" autocomplete="off" value="{{ old('password') }}"
                                     required>
-                                <i class="bi bi-eye-slash position-absolute top-50 end-0 translate-middle-y me-3 text-secondary cursor-pointer"
-                                    style="font-size: 1.1rem;"></i>
                             </div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
 
+                        <div class="mb-3">
+                            <label for="token"
+                                class="form-label fw-semibold text-dark small mb-1 d-flex align-items-center gap-2">
+                                <i class="bi bi-card-text text-dark fs-6"></i> Token
+                            </label>
+                            <input type="text" id="token" name="token" class="form-control custom-input @error('token') is-invalid @enderror"
+                                placeholder="Masukkan Token" autocomplete="off" value="{{ old('token') }}" required>
+                            @error('token')
+                                <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="d-flex justify-content-between align-items-center mb-4 pt-1">
+
                             <div class="form-check d-flex align-items-center gap-2 m-0 p-0">
                                 <input type="checkbox" class="form-check-input custom-checkbox m-0" id="privacy" required>
                                 <label class="form-check-label text-dark fw-medium" for="privacy"

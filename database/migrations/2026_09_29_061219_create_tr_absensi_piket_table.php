@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('tr_absensi_piket', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_user')->constrained('ms_user')->cascadeOnDelete();
+            $table->foreignId('id_user')->constrained('ms_user')->onDelete('cascade');
             $table->enum('status', ['Menunggu Konfirmasi', 'Hadir', 'Izin', 'Sakit', 'Alpa'])
                 ->default('Menunggu Konfirmasi');
             $table->timestamps();
