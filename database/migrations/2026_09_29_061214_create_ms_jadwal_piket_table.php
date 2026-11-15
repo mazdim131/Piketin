@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('ms_jadwal_piket', function (Blueprint $table) {
             $table->id();
-            $table->string('hari');
+            $table->string('user');
+            $table->string('day');
             $table->string('jobdesk');
         });
     }

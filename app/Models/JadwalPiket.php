@@ -4,17 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-#[Fillable(['hari', 'jobdesk'])]
+#[Fillable(['id_user', 'day', 'jobdesk'])]
 
 class JadwalPiket extends Model
 {
-    public function user(): HasMany {
-        return $this->hasMany(User::class, 'id_jadwal_piket', 'id');
+    protected $table = 'ms_jadwal_piket';
+
+    public $timestamps = false;
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id_user');
     }
 
-    public function peringatan(): HasMany {
+    public function peringatan(): HasMany
+    {
         return $this->hasMany(Peringatan::class, 'id_jadwal_piket', 'id');
     }
 }

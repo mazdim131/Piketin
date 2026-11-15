@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['username', 'email', 'password', 'role', 'id_kelas', 'id_jadwal_piket', 'token'])]
+#[Fillable(['nis', 'username', 'email', 'password', 'role', 'id_kelas', 'id_jadwal_piket', 'room_id'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -38,15 +38,23 @@ class User extends Authenticatable
         return $this->belongsTo(Sekolah::class, 'id_kelas', 'id');
     }
 
-    public function JadwalPiket(): BelongsTo {
+    public function JadwalPiket(): BelongsTo
+    {
         return $this->belongsTo(JadwalPiket::class, 'id_jadwal_piket', 'id');
     }
 
-    public function AbsensiPiket(): HasMany {
+    public function AbsensiPiket(): HasMany
+    {
         return $this->hasMany(AbsensiPiket::class, 'username', 'username');
     }
 
-    public function Peringatan(): HasMany {
+    public function Peringatan(): HasMany
+    {
         return $this->hasMany(Peringatan::class, 'username', 'username');
+    }
+
+    public function room(): BelongsTo
+    {
+        return $this->belongsTo(Room::class, 'room_id');
     }
 }

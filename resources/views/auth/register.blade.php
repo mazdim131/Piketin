@@ -91,11 +91,22 @@
                         @csrf
 
                         <div class="mb-3">
+                            <label for="nis"
+                                class="form-label fw-semibold text-dark small mb-1 d-flex align-items-center gap-2">
+                                <i class="bi bi-person text-dark fs-6"></i> Nis
+                            </label>
+                            <input type="number" id="nis" name="nis"
+                                class="form-control custom-input @error('nis') is-invalid @enderror"
+                                placeholder="Masukkan nis" autocomplete="off" value="{{ old('nis') }}" required>
+                        </div>
+
+                        <div class="mb-3">
                             <label for="username"
                                 class="form-label fw-semibold text-dark small mb-1 d-flex align-items-center gap-2">
                                 <i class="bi bi-person text-dark fs-6"></i> Username
                             </label>
-                            <input type="text" id="username" name="username" class="form-control custom-input @error('username') is-invalid @enderror"
+                            <input type="text" id="username" name="username"
+                                class="form-control custom-input @error('username') is-invalid @enderror"
                                 placeholder="Masukkan Username" autocomplete="off" value="{{ old('username') }}" required>
                         </div>
 
@@ -104,7 +115,8 @@
                                 class="form-label fw-semibold text-dark small mb-1 d-flex align-items-center gap-2">
                                 <i class="bi bi-envelope text-dark fs-6"></i> Email
                             </label>
-                            <input type="email" id="email" name="email" class="form-control custom-input @error('email') is-invalid @enderror"
+                            <input type="email" id="email" name="email"
+                                class="form-control custom-input @error('email') is-invalid @enderror"
                                 placeholder="Masukkan Email" autocomplete="off" value="{{ old('email') }}" required>
                         </div>
 
@@ -114,8 +126,10 @@
                                 <i class="bi bi-lock text-dark fs-6"></i> Password
                             </label>
                             <div class="position-relative">
-                                <input type="password" id="password" name="password" class="form-control custom-input pe-5 @error('password') is-invalid @enderror"
-                                    placeholder="Masukkan Password" autocomplete="off" value="{{ old('password') }}" required>
+                                <input type="password" id="password" name="password"
+                                    class="form-control custom-input pe-5 @error('password') is-invalid @enderror"
+                                    placeholder="Masukkan Password" autocomplete="off" value="{{ old('password') }}"
+                                    required>
                             </div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -128,21 +142,14 @@
                                 <i class="bi bi-lock text-dark fs-6"></i> Konfirmasi Password
                             </label>
                             <div class="position-relative">
-                                <input type="password" id="password_confirmation" name="password_confirmation" class="form-control custom-input pe-5 @error('password_confirmation') is-invalid @enderror"
-                                    placeholder="Konfirmasi Password" autocomplete="off" value="{{ old('password_confirmation') }}" required>
+                                <input type="password" id="password_confirmation" name="password_confirmation"
+                                    class="form-control custom-input pe-5 @error('password_confirmation') is-invalid @enderror"
+                                    placeholder="Konfirmasi Password" autocomplete="off"
+                                    value="{{ old('password_confirmation') }}" required>
                             </div>
                             @error('password_confirmation')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="token"
-                                class="form-label fw-semibold text-dark small mb-1 d-flex align-items-center gap-2">
-                                <i class="bi bi-card-text text-dark fs-6"></i> Token
-                            </label>
-                            <input type="text" id="token" name="token" class="form-control custom-input @error('token') is-invalid @enderror"
-                                placeholder="Masukkan Token" autocomplete="off" value="{{ old('token') }}" required>
                         </div>
 
                         <div class="d-flex justify-content-between align-items-center mb-4 pt-1">
@@ -168,7 +175,8 @@
                     </div>
                 </main>
 
-                <footer class="d-flex justify-content-between align-items-center text-secondary" style="font-size: 0.8rem;">
+                <footer class="d-flex justify-content-between align-items-center text-secondary"
+                    style="font-size: 0.8rem;">
                     <span class="opacity-75">Copyright © 2026 Piketin All rights reserved.</span>
                     <a href="#" class="text-secondary text-decoration-none fw-bold opacity-75">Privacy Policy</a>
                 </footer>

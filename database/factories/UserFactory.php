@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
 
 /**
  * @extends Factory<User>
@@ -25,11 +24,11 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'nis' => fake()->unique()->numerify('##########'),
             'username' => fake()->unique()->userName(),
             'email' => fake()->unique()->safeEmail(),
             'password' => static::$password ??= Hash::make('password'),
             'role' => 'siswa',
-            'token' => Str::random(20),
         ];
     }
 

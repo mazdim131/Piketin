@@ -149,7 +149,7 @@
                         <div class="mb-3">
                             <label for="token"
                                 class="form-label fw-semibold text-dark small mb-1 d-flex align-items-center gap-2">
-                                <i class="bi bi-card-text text-dark fs-6"></i> Token
+                                <i class="bi bi-card-text text-dark fs-6"></i> Token Room
                             </label>
                             <input type="text" id="token" name="token" class="form-control custom-input @error('token') is-invalid @enderror"
                                 placeholder="Masukkan Token" autocomplete="off" value="{{ old('token') }}" required>

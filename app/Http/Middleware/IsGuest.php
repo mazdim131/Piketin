@@ -17,7 +17,7 @@ class IsGuest
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check()) {
-            return redirect()->route('login')->with('successt', 'Silahkan login terlebih dahulu');
+            return redirect()->route('home')->with('error', 'Silahkan login terlebih dahulu');
         } else {
             return $next($request);
         }

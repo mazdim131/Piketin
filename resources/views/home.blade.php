@@ -234,7 +234,7 @@
                     <!-- Fitur 1: Pendataan -->
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="card border border-light-subtle rounded-4 p-3 bg-white h-100 position-relative">
-                            <a href="{{ route('set_job') }}" class="text-decoration-none">
+                            <a href="{{ route('piket') }}" class="text-decoration-none">
                                 <div class="card-body p-0 d-flex flex-column justify-content-between h-100">
                                     <div>
                                         <h4 class="fw-bold text-dark mb-1">Pendataan</h4>
@@ -395,7 +395,7 @@
                     <!-- Fitur 4: Jadwal Piket -->
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="card border border-light-subtle rounded-4 p-3 bg-white h-100 position-relative">
-                            <a href="{{ route('schedulePiket') }}" class="text-decoration-none">
+                            <a href="{{ route('piketSchedule.index') }}" class="text-decoration-none">
                                 <div class="card-body p-0 d-flex flex-column justify-content-between h-100">
                                     <div>
                                         <h4 class="fw-bold text-dark mb-1">Jadwal Piket</h4>
@@ -435,40 +435,38 @@
 
                 <!-- Modal Body -->
                 <div class="modal-body p-0">
-                    <!-- User Profile Section -->
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <!-- Avatar Circle Icon -->
                         <div class="d-flex align-items-center justify-content-center bg-secondary-subtle rounded-circle flex-shrink-0"
                             style="width: 70px; height: 70px;">
                             <i class="bi bi-person-fill text-dark" style="font-size: 2.5rem;"></i>
                         </div>
-                        <!-- User Info -->
                         <div>
                             <h4 class="fw-bold text-dark mb-1" style="font-size: 1.5rem; letter-spacing: -0.3px;">
-                                Dimas Hadi Syandana</h4>
+                                {{ Auth::user()->username }}</h4>
                             <p class="text-secondary mb-0 fw-medium" style="font-size: 1rem;">Cicurug 4 <span
-                                    class="mx-1">|</span> PPLG XI-3</p>
+                                    class="mx-1">|</span> {{ Auth::user()->nis  }}</p>
                         </div>
                     </div>
 
                     <!-- Form Absensi -->
-                    <form action="#" method="POST">
+                    <form action="{{ route('attendance') }}" method="POST">
                         @csrf
 
-                        <!-- Lupa Password Link (Rata Kanan Atas Input) -->
                         <div class="d-flex justify-content-end mb-1">
                             <a href="#" class="text-decoration-none fw-bold text-dark"
                                 style="font-size: 0.8rem;">Lupa Password?</a>
                         </div>
 
-                        <!-- Input Password -->
                         <div class="mb-3">
-                            <input type="password" name="password" class="form-control py-2 px-3 border-secondary-subtle"
+                            <input type="password" name="password"
+                                class="form-control py-2 px-3 border-secondary-subtle
+                            @error('password')
+                                is-invalid
+                            @enderror"
                                 placeholder="Masukkan Password"
                                 style="border-radius: 10px; font-size: 0.9rem; color: #555;" required>
                         </div>
 
-                        <!-- Checkbox Konfirmasi -->
                         <div class="form-check d-flex align-items-start gap-2 mb-4">
                             <input class="form-check-input mt-1 flex-shrink-0" type="checkbox" id="checkPiket"
                                 style="border-color: #ccc; cursor: pointer;" required>
@@ -478,7 +476,6 @@
                             </label>
                         </div>
 
-                        <!-- Submit Button Hijau -->
                         <button type="submit" class="btn w-100 py-2.5 text-white fw-medium border-0"
                             style="background-color: #059669; border-radius: 10px; font-size: 0.95rem; transition: background 0.2s;"
                             onmouseover="this.style.backgroundColor='#047857'"
@@ -511,21 +508,26 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex align-items-center gap-3">
-                                <i class="bi bi-person-circle fs-1"></i>
 
-                                <div>
-                                    <b>Dimas Hadi Syandana</b>
-                                    <p class="mb-0">Menyapu</p>
-                                </div>
+                                @foreach ($lineas as $item)
+                                    <i class="bi bi-person-circle fs-1"></i>
 
-                                <div class="ms-auto">
-                                    @if (Auth::check() && Auth::user()->role == 'admin')
-                                        <button type="button" class="btn btn-success btn-sm" name="btn-confirmation"><i
-                                                class="bi bi-check-lg me-1"></i> Konfirmasi</button>
-                                    @else
-                                        <button class="btn btn-danger btn-sm">Belum Mengerjakan</button>
-                                    @endif
-                                </div>
+                                    <div>
+                                        <b>{{ $item['username'] }}</b>
+                                        <p class="mb-0">Menyapu</p>
+                                    </div>
+
+                                    <div class="ms-auto">
+                                        @if (Auth::check() && Auth::user()->role == 'admin')
+                                            <button type="button" class="btn btn-success btn-sm"
+                                                name="btn-confirmation"><i class="bi bi-check-lg me-1"></i>
+                                                Konfirmasi</button>
+                                        @else
+                                            <button class="btn btn-danger btn-sm">Belum Mengerjakan</button>
+                                        @endif
+                                    </div>
+                                @endforeach
+
                             </div>
                         </div>
                     </div>
@@ -534,4 +536,12 @@
             </div>
         </div>
     </div>
+    @stack('style')
 @endsection
+
+<script>
+    // Ensure attendance form action is correct when modal opens
+    $(document).on('show.bs.modal', '#modalAbsensi', function() {
+        $(this).find('form').attr('action', '{{ route('attendance') }}');
+    });
+</script>

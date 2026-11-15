@@ -2,10 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 
 class RegisterTest extends TestCase
 {
@@ -24,7 +23,7 @@ class RegisterTest extends TestCase
             'email' => 'testuser@example.com',
             'password' => 'SecurePass123!',
             'password_confirmation' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertStatus(302);
@@ -33,7 +32,7 @@ class RegisterTest extends TestCase
         $this->assertDatabaseHas('ms_user', [
             'username' => 'testuser',
             'email' => 'testuser@example.com',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
             'role' => 'siswa',
         ]);
 
@@ -47,7 +46,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'SecurePass123!',
             'password_confirmation' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('username');
@@ -59,7 +58,7 @@ class RegisterTest extends TestCase
             'username' => 'testuser',
             'password' => 'SecurePass123!',
             'password_confirmation' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('email');
@@ -71,7 +70,7 @@ class RegisterTest extends TestCase
             'username' => 'testuser',
             'email' => 'test@example.com',
             'password_confirmation' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('password');
@@ -83,22 +82,10 @@ class RegisterTest extends TestCase
             'username' => 'testuser',
             'email' => 'test@example.com',
             'password' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('password_confirmation');
-    }
-
-    public function test_registration_requires_token(): void
-    {
-        $response = $this->post('/register', [
-            'username' => 'testuser',
-            'email' => 'test@example.com',
-            'password' => 'SecurePass123!',
-            'password_confirmation' => 'SecurePass123!',
-        ]);
-
-        $response->assertSessionHasErrors('token');
     }
 
     public function test_registration_password_must_match_confirmation(): void
@@ -108,7 +95,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'SecurePass123!',
             'password_confirmation' => 'DifferentPass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('password');
@@ -123,7 +110,7 @@ class RegisterTest extends TestCase
             'email' => 'existing@example.com',
             'password' => 'SecurePass123!',
             'password_confirmation' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('email');
@@ -138,7 +125,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'SecurePass123!',
             'password_confirmation' => 'SecurePass123!',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('username');
@@ -151,7 +138,7 @@ class RegisterTest extends TestCase
             'email' => 'test@example.com',
             'password' => 'short',
             'password_confirmation' => 'short',
-            'token' => 'test-token-123',
+            'nis' => '1234567890',
         ]);
 
         $response->assertSessionHasErrors('password');

@@ -9,7 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable(['id_absensi_piket', 'status_kehadiran', 'tanggal_kehadiran'])]
 class RiwayatPiket extends Model
 {
-    public function AbsensiPiket(): BelongsTo {
+    protected $table = 'ms_riwayat_piket';
+
+    public function AbsensiPiket(): BelongsTo
+    {
         return $this->belongsTo(AbsensiPiket::class, 'id_absensi_piket', 'id');
     }
 }
