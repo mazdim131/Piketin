@@ -8,17 +8,17 @@ use Illuminate\Support\Facades\Auth;
 
 class RoomController extends Controller
 {
-    public function landing(Request $request)
-    {
-        if ($token = $request->cookie('last_room_token')) {
-            $room = Room::where('token', $token)->where('is_active', true)->first();
-            if ($room) {
-                return redirect()->route('room.show', $room);
-            }
-        }
+    // public function landing(Request $request)
+    // {
+    //     if ($token = $request->cookie('last_room_token')) {
+    //         $room = Room::where('token', $token)->where('is_active', true)->first();
+    //         if ($room) {
+    //             return redirect()->route('room.show', $room);
+    //         }
+    //     }
 
-        return view('landing');
-    }
+    //     return view('landing');
+    // }
 
     public function join(Request $request)
     {

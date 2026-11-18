@@ -99,6 +99,58 @@
                             @enderror
                         </div>
                     </div>
+                    
+                    <div class="d-flex justify-content-center ms-auto gap-4">
+                        <div class="col-5">
+                            <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Batal</button>
+                        </div>
+                        <div class="col-5">
+                            <button type="submit" class="btn btn-success w-100">Simpan</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEditPiket" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content p-4">
+                <form method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div class="">
+                        <h4 class="modal-title">Edit Piket Siswa</h4>
+                        <p class="text-secondary">Atur jobdesk dan hari piket untuk siswa yang dipilih.</p>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Siswa</label>
+                            <select name="id_user" class="form-select" required>
+                                <option value="">-- Pilih Siswa --</option>
+                                @foreach ($siswa ?? [] as $s)
+                                    <option value="{{ $s->id }}">{{ $s->username }} ({{ $s->nis }})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Hari Piket</label>
+                            <select name="day" class="form-select" required>
+                                @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat'] as $d)
+                                    <option value="{{ $d }}">{{ $d }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Jobdesk</label>
+                            <select name="jobdesk" class="form-select" required>
+                                @foreach (['Menyapu', 'Mengepel', 'Lap Kaca'] as $j)
+                                    <option value="{{ $j }}">{{ $j }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
                     <div class="d-flex justify-content-center ms-auto gap-4">
                         <div class="col-5">
                             <button type="button" class="btn btn-danger w-100" data-bs-dismiss="modal">Batal</button>
@@ -161,6 +213,16 @@
                         }
                     @endif
                 ]
+            });
+
+            $('#modalEditPiket').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var modal = $(this);
+
+                modal.find('form').attr('action', button.attr('data-update-url'));
+                modal.find('select[name="id_user"]').val(button.attr('data-user-id'));
+                modal.find('select[name="day"]').val(button.attr('data-day'));
+                modal.find('select[name="jobdesk"]').val(button.attr('data-jobdesk'));
             });
         });
     </script>

@@ -49,16 +49,23 @@ class PiketScheduleController extends Controller
                     return $html;
                 })
                 ->addColumn('action', function ($row) {
-                    $editUrl = route('piketSchedule.edit', $row->id);
+                    $updateUrl = route('piketSchedule.update', $row->id);
                     $deleteUrl = route('piketSchedule.destroy', $row->id);
                     $csrf = csrf_field();
                     $method = method_field('DELETE');
 
                     return '
                         <div class="action-buttons">
-                            <a href="'.$editUrl.'" class="btn-action btn-edit" title="Edit">
+                            <button type="button" class="btn-action btn-edit" title="Edit"
+                                data-bs-toggle="modal" data-bs-target="#modalEditPiket"
+                                data-id="'.e($row->id).'"
+                                data-user-id="'.e($row->user?->id).'"
+                                data-username="'.e($row->user?->username ?? '-').'"
+                                data-day="'.e($row->day).'"
+                                data-jobdesk="'.e($row->jobdesk).'"
+                                data-update-url="'.$updateUrl.'">
                                 <i class="bi bi-pencil"></i>
-                            </a>
+                            </button>
                             <form action="'.$deleteUrl.'" method="POST" class="d-inline">
                                 '.$csrf.'
                                 '.$method.'
@@ -80,7 +87,7 @@ class PiketScheduleController extends Controller
             ->orderBy('username')
             ->get();
 
-        return view('piket', compact('siswa'));
+        return view('schedulePiket.piket', compact('siswa'));
     }
 
     /**
@@ -126,7 +133,9 @@ class PiketScheduleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $piketSchedule = JadwalPiket::findOrFail($id);
+
+        return view('schedulePiket.edit');
     }
 
     /**
@@ -134,7 +143,30 @@ class PiketScheduleController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'id_user' => ['required'],
+            'day' => ['required', 'in:Senin,Selasa,Rabu,Kamis,Jumat'],
+            'jobdesk' => ['required', 'in:Menyapu,Mengepel,Lap Kaca'],
+        ]);
+
+        $piketSchedule = JadwalPiket::findOrFail($id);
+        $siswaBaru = User::findOrFail($validated['id_user']);
+
+        abort_unless($siswaBaru->role === 'siswa', 403);
+        abort_unless(Auth::user()?->room_id === $siswaBaru->room_id, 403);
+
+        $siswaLama = $piketSchedule->user;
+
+        if ($siswaLama && $siswaLama->id !== $siswaBaru->id) {
+            $siswaLama->update(['id_jadwal_piket' => null]);
+        }
+
+        $piketSchedule->update($validated);
+        $siswaBaru->update(['id_jadwal_piket' => $piketSchedule->id]);
+
+        return redirect()
+            ->route('piketSchedule.index')
+            ->with('success', 'Jadwal piket berhasil diperbarui.');
     }
 
     /**
@@ -142,6 +174,10 @@ class PiketScheduleController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $piketSchedule = JadwalPiket::findOrFail($id);
+
+        $piketSchedule->delete();
+
+        return redirect()->route('piketSchedule.index')->with('success', 'Jadwal siswa berhasil di hapus!');
     }
 }

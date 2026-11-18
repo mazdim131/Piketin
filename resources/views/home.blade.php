@@ -234,7 +234,7 @@
                     <!-- Fitur 1: Pendataan -->
                     <div class="col-12 col-sm-6 col-lg-3">
                         <div class="card border border-light-subtle rounded-4 p-3 bg-white h-100 position-relative">
-                            <a href="{{ route('piket') }}" class="text-decoration-none">
+                            <a href="{{ route('schedulePiket.piket') }}" class="text-decoration-none">
                                 <div class="card-body p-0 d-flex flex-column justify-content-between h-100">
                                     <div>
                                         <h4 class="fw-bold text-dark mb-1">Pendataan</h4>
@@ -444,7 +444,7 @@
                             <h4 class="fw-bold text-dark mb-1" style="font-size: 1.5rem; letter-spacing: -0.3px;">
                                 {{ Auth::user()->username }}</h4>
                             <p class="text-secondary mb-0 fw-medium" style="font-size: 1rem;">Cicurug 4 <span
-                                    class="mx-1">|</span> {{ Auth::user()->nis  }}</p>
+                                    class="mx-1">|</span> {{ Auth::user()->nis }}</p>
                         </div>
                     </div>
 
@@ -504,39 +504,43 @@
                 </div>
 
                 <!-- Modal Body -->
-                <div class="modal-body p-0">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center gap-3">
-
-                                @foreach ($lineas as $item)
+                <div class="d-flex flex-column gap-3">
+                    @forelse ($pending as $item)
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center gap-3">
                                     <i class="bi bi-person-circle fs-1"></i>
 
                                     <div>
                                         <b>{{ $item['username'] }}</b>
-                                        <p class="mb-0">Menyapu</p>
+                                        <p class="mb-0">{{ $item['jobdesk'] }}</p>
                                     </div>
 
                                     <div class="ms-auto">
                                         @if (Auth::check() && Auth::user()->role == 'admin')
-                                            <button type="button" class="btn btn-success btn-sm"
-                                                name="btn-confirmation"><i class="bi bi-check-lg me-1"></i>
-                                                Konfirmasi</button>
+                                            <form action="{{ route('attendance.confirm', $item['id']) }}" method="POST">
+                                                @csrf
+
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="bi bi-check-lg me-1">Konfirmasi</i>
+                                                </button>
+                                            </form>
                                         @else
-                                            <button class="btn btn-danger btn-sm">Belum Mengerjakan</button>
+                                            <button type="button" class="btn btn-danger btn-sm">Belum
+                                                Mengerjakan</button>
                                         @endif
                                     </div>
-                                @endforeach
-
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @empty
+                        <p>Belum ada absensi tercatat!</p>
+                    @endforelse
                 </div>
 
             </div>
         </div>
     </div>
-    @stack('style')
 @endsection
 
 <script>

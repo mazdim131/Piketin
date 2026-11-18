@@ -22,19 +22,18 @@ class UserController extends Controller
             'email' => ['required', 'email:rfc', 'unique:ms_user,email'],
             'password' => ['required', 'min:8', 'max:20', 'confirmed', Password::min(8)->max(20)],
             'password_confirmation' => ['required'],
-            [
-                'username.required' => 'Username wajib diisi!',
-                'username.min' => 'Username minimal 3 karakter',
-                'username.unique' => 'Username sudah terdaftar',
-                'email.required' => 'Email wajib diisi!',
-                'email.unique' => 'Email yang diinput sudah terdaftar',
-                'email.email' => 'Format email tidak valid',
-                'password.required' => 'Password wajib diisi!',
-                'password.min' => 'Password minimal 8 karakter',
-                'password.max' => 'Password maximal 20 karakter',
-                'password.confirmed' => 'Konfirmasi password tidak cocok',
-                'nis.required' => 'Nis wajib diisi!',
-            ],
+        ], [
+            'username.required' => 'Username wajib diisi!',
+            'username.min' => 'Username minimal 3 karakter',
+            'username.unique' => 'Username sudah terdaftar',
+            'email.required' => 'Email wajib diisi!',
+            'email.unique' => 'Email yang diinput sudah terdaftar',
+            'email.email' => 'Format email tidak valid',
+            'password.required' => 'Password wajib diisi!',
+            'password.min' => 'Password minimal 8 karakter',
+            'password.max' => 'Password maximal 20 karakter',
+            'password.confirmed' => 'Konfirmasi password tidak cocok',
+            'nis.required' => 'Nis wajib diisi!',
         ]);
 
         $createAccount = User::create([
@@ -78,7 +77,10 @@ class UserController extends Controller
                 ])->onlyInput('email');
             }
 
-            Auth::user()->update(['room_id' => $room->id]);
+            $user = User::find(Auth::id());
+            if ($user) {
+                $user->update(['room_id' => $room->id]);
+            }
 
             return redirect()
                 ->route('home', $room)
@@ -121,7 +123,7 @@ class UserController extends Controller
             return back()->with('error', 'Password yang anda masukkan tidak dikenali!');
         }
 
-        $status = $request->has('checkPiket') ? 'Menunggu Konfirmasi' : 'Hadir';
+        $status = $request->has('checkPiket') ? 'Hadir' : 'Menunggu Konfirmasi';
 
         $absensi = AbsensiPiket::create([
             'id_user' => $user->id,
@@ -144,35 +146,39 @@ class UserController extends Controller
     // function halaman
     public function home()
     {
-        $absensi = AbsensiPiket::where('status', 'Hadir')
-            ->get();
+        $absensiHadir = AbsensiPiket::where('status', 'Hadir')->get();
+        $absensiPending = AbsensiPiket::where('status', 'Menunggu Konfirmasi')->get();
 
-        $lineas = $absensi->map(function ($item) {
+        $hadir = $absensiHadir->map(function ($item) {
             return [
+                'id' => $item->id,
                 'username' => $item->user->username ?? 'Unknown',
+                'jobdesk' => $item->user?->JadwalPiket?->jobdesk ?? '-',
             ];
         });
 
-        return view('home', ['lineas' => $lineas]);
+        $pending = $absensiPending->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'username' => $item->user->username ?? 'Unknown',
+                'jobdesk' => $item->user?->JadwalPiket?->jobdesk ?? '-',
+            ];
+        });
+
+        return view('home', [
+            'hadir' => $hadir,
+            'pending' => $pending,
+        ]);
+    }
+
+    public function absentStudents()
+    {
+        return $this->home();
     }
 
     public function about()
     {
         return view('about');
-    }
-
-    public function absentStudents()
-    {
-        $absensi = AbsensiPiket::where('status', 'Hadir')
-            ->get();
-
-        $lineas = $absensi->map(function ($item) {
-            return [
-                'username' => $item->user->username ?? 'Unknown',
-            ];
-        });
-
-        return view('home', ['lineas' => $lineas]);
     }
 
     public function set_job()
@@ -185,7 +191,7 @@ class UserController extends Controller
             ->orderBy('username')
             ->get();
 
-        return view('piket', compact('siswa'));
+        return view('schedulePiket.piket', compact('siswa'));
     }
 
     public function piketData()
@@ -218,7 +224,30 @@ class UserController extends Controller
 
     public function confirmation()
     {
-        return view('confirmation');
+        $pending = AbsensiPiket::where('status', 'Menunggu Konfirmasi')
+            ->with(['user', 'user.JadwalPiket'])
+            ->get();
+
+        return view('home', [
+            'pending' => $pending,
+        ]);
+    }
+
+    public function confirmAttendance(string $id)
+    {
+        $absensi = AbsensiPiket::findOrFail($id);
+
+        // abort_unless($absensi->status === 'Menunggu Konfirmasi', 403);
+
+        $absensi->update(['status' => 'Hadir']);
+
+        RiwayatPiket::create([
+            'id_absensi_piket' => $absensi->id,
+            'status_kehadiran' => 'hadir',
+            'tanggal_kehadiran' => now(),
+        ]);
+
+        return back()->with('success', 'Absensi berhasil dikonfirmasi.');
     }
 
     public function kas()
